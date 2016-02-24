@@ -7,42 +7,63 @@ Rails.application.routes.draw do
         get 'find_all', to: 'find#index'
         get 'random', to: 'random#show'
       end
-      resources :merchants, only: [:show, :index]
+      resources :merchants, only: [:show, :index] do
+        get '/items', to: 'merchants/items#index'
+        get '/invoices', to: 'merchants/invoices#index'
+      end
 
       namespace :customers do
         get 'find', to: 'find#show'
         get 'find_all', to: 'find#index'
         get 'random', to: 'random#show'
       end
-      resources :customers, only: [:show, :index]
+      resources :customers, only: [:show, :index] do
+        get '/invoices', to: 'customers/invoices#index'
+        get '/transactions', to: 'customers/transactions#index'
+      end
 
       namespace :items do
         get 'find', to: 'find#show'
         get 'find_all', to: 'find#index'
         get 'random', to: 'random#show'
       end
-      resources :items, only: [:show, :index]
+      resources :items, only: [:show, :index] do
+        get '/invoice_items', to: 'items/invoice_items#index'
+        get '/merchant', to: 'items/merchant#show'
+      end
 
       namespace :invoices do
         get 'find', to: 'find#show'
         get 'find_all', to: 'find#index'
         get 'random', to: 'random#show'
       end
-      resources :invoices, only: [:show, :index]
+      resources :invoices, only: [:show, :index] do
+        get '/transactions', to: 'invoices/transactions#index'
+        get '/invoice_items', to: 'invoices/invoice_items#index'
+        get '/items', to: 'invoices/items#index'
+        get '/customer', to: 'invoices/customer#show'
+        get '/merchant', to: 'invoices/merchant#show'
+      end
 
       namespace :invoice_items do
         get 'find', to: 'find#show'
         get 'find_all', to: 'find#index'
         get 'random', to: 'random#show'
       end
-      resources :invoice_items, only: [:show, :index]
+      resources :invoice_items, only: [:show, :index] do
+        get '/invoice', to: 'invoice_items/invoice#show'
+        get '/item', to: 'invoice_items/item#show'
+      end
 
       namespace :transactions do
         get 'find', to: 'find#show'
         get 'find_all', to: 'find#index'
         get 'random', to: 'random#show'
       end
-      resources :transactions, only: [:show, :index]
+      resources :transactions, only: [:show, :index] do
+        get '/invoice', to: 'transactions/invoice#show'
+
+      end
     end
   end
 end

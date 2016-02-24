@@ -4,12 +4,42 @@ FactoryGirl.define do
     sequence(:last_name) { |n| "last_name#{n}" }
     created_at "2012-03-27 14:54:09 UTC"
     updated_at "2012-03-27 14:54:09 UTC"
+
+    factory :customer_with_invoices do
+      transient do
+        invoice_count 2
+      end
+
+      after(:create) do |customer, evaluator|
+        create_list(:invoice_with_transactions, evaluator.invoice_count, customer: customer)
+      end
+    end
   end
 
   factory :merchant do
     sequence(:name) { |n| "merch_name#{n}" }
     created_at "2012-03-27 14:54:09 UTC"
     updated_at "2012-03-27 14:54:09 UTC"
+
+    factory :merchant_with_items do
+      transient do
+        item_count 3
+      end
+
+      after(:create) do |merchant, evaluator|
+        create_list(:item, evaluator.item_count, merchant: merchant)
+      end
+    end
+
+    factory :merchant_with_invoices do
+      transient do
+        invoice_count 4
+      end
+
+      after(:create) do |merchant, evaluator|
+        create_list(:invoice, evaluator.invoice_count, merchant: merchant)
+      end
+    end
   end
 
   factory :item do
@@ -36,6 +66,36 @@ FactoryGirl.define do
     status "shipped"
     created_at "2012-03-27 14:54:09 UTC"
     updated_at "2012-03-27 14:54:09 UTC"
+
+    factory :invoice_with_transactions do
+      transient do
+        transaction_count 5
+      end
+
+      after(:create) do |invoice, evaluator|
+        create_list(:transaction, evaluator.transaction_count, invoice: invoice)
+      end
+    end
+
+    factory :invoice_with_invoice_items do
+      transient do
+        invoice_items_count 3
+      end
+
+      after(:create) do |invoice, evaluator|
+        create_list(:invoice_item, evaluator.invoice_items_count, invoice: invoice)
+      end
+    end
+
+    # factory :invoice_with_items do
+    #   transient do
+    #     items_count 2
+    #   end
+    #
+    #   after(:create) do |invoice, evaluator|
+    #     create_list(:item, evaluator.items_count, invoice: invoice)
+    #   end
+    # end
   end
 
   factory :transaction do
