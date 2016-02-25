@@ -37,7 +37,7 @@ FactoryGirl.define do
       end
 
       after(:create) do |merchant, evaluator|
-        create_list(:invoice, evaluator.invoice_count, merchant: merchant)
+        create_list(:invoice_with_transactions, evaluator.invoice_count, merchant: merchant)
       end
     end
   end
@@ -53,7 +53,7 @@ FactoryGirl.define do
 
   factory :invoice_item do
     item
-    invoice
+    association :invoice, factory: :invoice_with_transactions
     sequence(:quantity) { |n| n }
     unit_price
     created_at "2012-03-27 14:54:09 UTC"
@@ -86,16 +86,6 @@ FactoryGirl.define do
         create_list(:invoice_item, evaluator.invoice_items_count, invoice: invoice)
       end
     end
-
-    # factory :invoice_with_items do
-    #   transient do
-    #     items_count 2
-    #   end
-    #
-    #   after(:create) do |invoice, evaluator|
-    #     create_list(:item, evaluator.items_count, invoice: invoice)
-    #   end
-    # end
   end
 
   factory :transaction do
