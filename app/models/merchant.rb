@@ -17,4 +17,13 @@ class Merchant < ActiveRecord::Base
                  .joins(:invoice_items)
                  .sum("unit_price * quantity")
   end
+
+  def favorite_customer
+    invoices.joins(:transactions)
+    .where("transactions.result = ?", "success")
+    .joins(:customer)
+    .group(:customer)
+    .order(count: :desc)
+    .count.first.first
+  end
 end
